@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
+import './App.css';
 
 const App = () => {
   const [todoList, setTodoList] = useState([]);
@@ -60,8 +61,8 @@ const App = () => {
 
 return (
 <BrowserRouter>
-<div>
-    <h1>Todo List</h1>
+<div className='dark-mode'>
+    <h1 className='heading'>Todo List</h1>
     <Routes>
     <Route path="*" element={<AddTodoForm onAddTodo={addTodo} />} />
     <Route 
