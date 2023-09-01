@@ -22,6 +22,7 @@ const AddTodoForm = ({ onAddTodo }) => {
         todoTitle={todoTitle}
         handleTitleChange={handleTitleChange}
         title="Title"
+        children={"Title:"}
         type="text"
         id="TodoTitle"
         ></InputWithLabel>

@@ -12,14 +12,17 @@
   }
   
   .form__input {
+  align-items: center;
     width: 100%;
-    padding: 0.5rem;
+    padding: 1 rem;
     margin-bottom: 1rem;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
     line-height: 1.5;
     color: #495057;
+    background-color: #fff;
+    
   }
   .addButton {
     padding: 1rem;
