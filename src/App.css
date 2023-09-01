@@ -1,15 +1,19 @@
 body {
-    background-color: #021728;
-    color: #afc4da;
+    background-color: #02111e;
+    color: rgb(241 245 249);
     font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
 }
 
 .heading {
-    text-align: center;
+    text-align:justify;
     margin: 0;
     padding: 1rem;
-    color: #afc4da;
+    color: rgb(241 245 249);
+    margin-bottom: 2 rem;
 }
 
 .nav-item {
@@ -42,7 +46,7 @@ button {
 }
 
 button:hover {
-    background-color: #021728;
+    background-color:#0c2232;
     color: #afc4da;
 }
 

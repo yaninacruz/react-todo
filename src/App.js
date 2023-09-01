@@ -61,23 +61,27 @@ const App = () => {
 
 return (
 <BrowserRouter>
-<div className='dark-mode'>
-    <h1 className='heading'>Todo List</h1>
+  <>
+    <h1>Todo List</h1>
     <Routes>
-    <Route path="*" element={<AddTodoForm onAddTodo={addTodo} />} />
-    <Route 
-    path="/"
-    element={
-  isLoading ? (
-      <p>Loading...</p>
-    ) : (
-    <TodoList todoList={todoList} onRemoveTodo = {removeTodo} />)}
-    />
-    <Route path= "/new" element={<h1>New Todo List</h1>} />
+      <Route
+        path="/"
+        element={
+          isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              <AddTodoForm onAddTodo={addTodo} />
+              <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
+            </>
+          )
+        }
+      />
+      <Route path='/new' element={<h1>New Todo List</h1>} />
     </Routes>
-     </div>
-     </BrowserRouter>
-  );
+  </>
+</BrowserRouter>
+);
 };
 
 export default App;
