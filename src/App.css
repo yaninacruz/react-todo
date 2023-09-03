@@ -5,6 +5,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100vh;
+    margin: 0;
 
 }
 
@@ -14,6 +16,8 @@ body {
     padding: 1rem;
     color: rgb(241 245 249);
     margin-bottom: 2 rem;
+    font-size: 2rem;
+    text-align: center;
 }
 
 .nav-item {
@@ -34,7 +38,7 @@ input[type="text"] {
     align-items: center;
     color: #495057;
     background-color: #fff;
-
+    padding: 0.5rem;
 
 }
 
@@ -46,11 +50,19 @@ button {
     color: #021728;
     font-size: 1rem;
     cursor: pointer;
+    margin-left: 1rem;
 }
 
 button:hover {
     background-color:#0c2232;
     color: #afc4da;
+}
+
+@media (min-width: 576px) {
+    .container {
+        max-width: 576px;
+        margin: 0 auto;
+    }
 }
 
 @media (min-width: 768px) {

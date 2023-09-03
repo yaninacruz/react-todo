@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import style from './InputWithLabel.module.css';
 
 const InputWithLabel = ({
@@ -30,6 +31,14 @@ const InputWithLabel = ({
             />
         </>
     );
+};
+
+InputWithLabel.propTypes = {
+    todoTitle: PropTypes.string.isRequired,
+    handleTitleChange: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+    children: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
 };
 
 
