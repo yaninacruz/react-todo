@@ -2,22 +2,21 @@ body {
     background-color: #02111e;
     color: rgb(241 245 249);
     font-family: Arial, Helvetica, sans-serif;
-    display: flex;
+    display:flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
     margin: 0;
-
+    padding-top: 4rem;
+padding-bottom: 4rem;
+padding-right: 2rem;
+padding-left: 2rem;
 }
 
+
 .heading {
-    text-align:justify;
-    margin: 0;
-    padding: 1rem;
-    color: rgb(241 245 249);
-    margin-bottom: 2 rem;
-    font-size: 2rem;
-    text-align: center;
+    color: #afc4da;
+margin-bottom: 2rem;
 }
 
 .nav-item {
@@ -25,9 +24,10 @@ body {
 }
 
 ul {
-    list-style: none;
     padding: 0;
-    margin: 0;
+    list-style: none;
+    align-items: left;
+
 }
 
 input[type="text"] {
@@ -51,42 +51,63 @@ button {
     font-size: 1rem;
     cursor: pointer;
     margin-left: 1rem;
+    align-items: right;  
+    justify-content:flex-end;
+
 }
 
 button:hover {
-    background-color:#0c2232;
-    color: #afc4da;
-}
-
-@media (min-width: 576px) {
-    .container {
-        max-width: 576px;
-        margin: 0 auto;
-    }
-}
-
-@media (min-width: 768px) {
-    .container {
-        max-width: 768px;
-        margin: 0 auto;
-    }
-}
-
-@media (min-width: 992px) {
-    .container {
-        max-width: 992px;
-        margin: 0 auto;
-    }
-}
-
-@media (min-width: 1200px) {
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
+    background-color: #afc4da;
+    color: #021728;
 }
 
 .icon {
     margin-left: 0.5rem;
     cursor: pointer;
+}
+.toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content:flex-start;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    padding-left: 0;
+    margin-left: 0;
+    text-align: center;
+
+}
+
+.toggle-button {
+    width: auto;
+    text-align: center;
+    background-color: #afc4da;
+    color: #021728;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-right: auto;
+    border-radius: 0.5rem;
+    margin-left: 0;
+    text-align: center;
+    justify-content: flex-end;
+}
+
+
+@media (max-width: 480px) {
+    body {
+        padding: 1rem 0.5rem;
+
+    }
+    .heading {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 2rem 1rem;
+
+    }
+    .heading {
+        font-size: 2rem;
+    }
 }

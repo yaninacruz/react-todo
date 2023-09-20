@@ -28,6 +28,7 @@ const InputWithLabel = ({
                 value={todoTitle}
                 onChange={handleTitleChange}
                 ref={inputRef}
+                placeholder='Add a todo title'
             />
         </>
     );
