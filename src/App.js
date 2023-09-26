@@ -13,16 +13,10 @@ const AIRTABLE_HEADERS = {
 
 
 const App = () => {
-  const [todoList, setTodoList] = useState(() => {
-      const savedData = JSON.parse(localStorage.getItem('savedTodoList'));
-      return savedData ? [...savedData] : [];
-
-    });
-
+  const [todoList, setTodoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState('asc');
-  const [showCompleted, setShowCompleted] = useState(false);
-  const [completedTasks, setCompletedTasks] = useState([]);
+  const [showCompleted, setShowCompleted] = useState(true);
 
   async function fetchData() {
     const options = {
@@ -51,7 +45,7 @@ const App = () => {
   const todos = sortedTodos.map((todo) => ({
       id: todo.id,
       title: todo.fields.title,
-      isChecked: false,
+      isChecked: todo.fields.isChecked || false,
     }));
     console.log(todos);
 
@@ -67,9 +61,39 @@ const App = () => {
       fetchData();
     }, []);
 
-  useEffect(() => {
-    localStorage.setItem('savedTodoList', JSON.stringify(todoList));
-  }, [todoList]);
+  async function updateCheckboxInAirtable(todoID, isCheckedStatus) {
+    const options = {
+      method: 'PATCH',
+      headers: AIRTABLE_HEADERS,
+      body: JSON.stringify({
+        fields: {
+          isChecked: isCheckedStatus,
+        },
+      }),
+    };
+
+    const url = `${AIRTABLE_ENDPOINT}/${todoID}`;
+
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+    }
+    catch (error) {
+      console.error(error.message);
+    }
+  }
+
+const handleCheckboxChange = async (todoId) => {
+  const updatedTodo = todoList.find((todo) => todo.id === todoId);
+  updatedTodo.isChecked = !updatedTodo.isChecked;
+
+  await updateCheckboxInAirtable(todoId, updatedTodo.isChecked);
+  const updatedTodoList = todoList.map((todo) => (todo.id === todoId ? updatedTodo : todo));
+  setTodoList(updatedTodoList);
+};
+
 
   const handleSortToggle = () => {
     setSortOrder (prevOrder => {
@@ -95,8 +119,6 @@ const App = () => {
       }),
     };
 
-    const url = `https://api.airtable.com/v0/${process.env.REACT_APP_AIRTABLE_BASE_ID}/${process.env.REACT_APP_TABLE_NAME}`;
-
     try {
       const response = await fetch(AIRTABLE_ENDPOINT, options);
       if (!response.ok) {
@@ -120,7 +142,6 @@ const App = () => {
     const savedTodo = await saveToAirtable(newTodoItem);
     const updatedTodoList = [...todoList, savedTodo];
     setTodoList(updatedTodoList);
-  localStorage.setItem('savedTodoList', JSON.stringify(updatedTodoList));
   };
 
   async function deleteFromAirtable(todoId) {
@@ -145,7 +166,6 @@ const App = () => {
     await deleteFromAirtable(todoId);
     const updatedTodoList = todoList.filter((todo) => todo.id !== todoId);
     setTodoList(updatedTodoList);
-    localStorage.setItem('savedTodoList', JSON.stringify(updatedTodoList));
   };
 
   async function updateInAirtable(updatedTodo) {
@@ -183,28 +203,10 @@ const App = () => {
   }
 
 const editTodo = async (updatedTodo) => {
-  await updateInAirtable(updatedTodo);
-  const updatedTodoList = todoList.map(todo => (todo.id === updatedTodo.id ? updatedTodo : todo));
+  const newData = await updateInAirtable(updatedTodo);
+  const updatedTodoList = todoList.map((todo) => (todo.id === updatedTodo.id ? newData : todo));
   setTodoList(updatedTodoList);
-  localStorage.setItem('savedTodoList', JSON.stringify(updatedTodoList));
 };
-
-  const handleCheckboxChange = (todoId) => {
-    const updatedTodo = todoList.find((todo) => todo.id === todoId);
-    updatedTodo.isChecked = !updatedTodo.isChecked;
-
-    const updatedTodoList = todoList.filter((todo) => todo.id !== todoId);
-
-    if (updatedTodo.isChecked) {
-      setCompletedTasks((prevCompletedTasks) => [...prevCompletedTasks, updatedTodo]);
-    } else {
-      setCompletedTasks((prevCompletedTasks) => prevCompletedTasks.filter((task) => task.id !== todoId));
-    }
-
-    setTodoList(updatedTodoList);
-
-
-  };
 
   return (
 
@@ -222,14 +224,19 @@ const editTodo = async (updatedTodo) => {
                   <AddTodoForm onAddTodo={addTodo} />
                   <div className='toggle-container'>
                     <button className='toggle-button' onClick={handleSortToggle}>
-                      Sorted Alphabetically ({sortOrder === 'asc' ? 'A to Z' : 'Z to A'})
+                    ({sortOrder === 'asc' ? 'A to Z' : 'Z to A'})
                     </button>
                   </div>
-                  <TodoList todoList={todoList} onRemoveTodo={removeTodo} onEditTodo={editTodo} onCheckboxChange={handleCheckboxChange}/>
+                  <TodoList
+                  todoList={todoList.filter((todo) => !todo.isChecked)}
+                  onRemoveTodo={removeTodo}
+                  onEditTodo={editTodo}
+                  onCheckboxChange={handleCheckboxChange}
+                  />
                   <button className='toggle-button' onClick={() => setShowCompleted(!showCompleted)}>
                     {showCompleted ? 'Hide Completed' : 'Show Completed'}
                   </button>
-                  {showCompleted && <CompletedItemsList completedTasks={completedTasks} />}
+                  {showCompleted && <CompletedItemsList completedTasks={todoList.filter((todo) => todo.isChecked)} onCheckboxChange={handleCheckboxChange} onRemoveTodo={removeTodo} onEditTodo={editTodo}/>}
                 </>
               )
             }

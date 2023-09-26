@@ -2,13 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import style from './TodoListItem.module.css';
 
-const TodoListItem = ({ todo, onRemoveTodo, onEditTodo }) => {
+    const TodoListItem = ({
+        todo: { id, title, isChecked: todoIsChecked },
+        onRemoveTodo,
+        onEditTodo,
+        onCheckboxChange,
+    }) => {
+
     const [isEditing, setIsEditing] = React.useState(false);
-    const [editedTitle, setEditedTitle] = React.useState(todo.title);
-    const [isChecked, setIsChecked] = React.useState(false);
+    const [editedTitle, setEditedTitle] = React.useState(title);
+    const [isChecked, setIsChecked] = React.useState(todoIsChecked);
 
     const handleRemoveClick = () => {
-        onRemoveTodo (todo.id);
+        onRemoveTodo (id);
     };
 
     const handleEditClick = () => {
@@ -17,15 +23,16 @@ const TodoListItem = ({ todo, onRemoveTodo, onEditTodo }) => {
 
     const handleSaveClick = () => {
         onEditTodo({
-            ...todo,
+            id,
             title: editedTitle,
+            isChecked
         });
         setIsEditing(false);
     };
 
     const handleCancelEditClick = () => {
         setIsEditing(false);
-        setEditedTitle(todo.title);
+        setEditedTitle(title);
     };
 
     const handleTitleChange = (e) => {
@@ -33,7 +40,8 @@ const TodoListItem = ({ todo, onRemoveTodo, onEditTodo }) => {
     };
 
     const handleCheckboxChange = () => {
-        setIsChecked(!isChecked);
+        setIsChecked(prev => !prev);
+        onCheckboxChange(id);
     };
     
     return (
@@ -43,15 +51,13 @@ type='checkbox'
 checked={isChecked}
 onChange={handleCheckboxChange}
 />
-<span
-style={{ textDecoration: isChecked ? 'line-through' : 'none' }}
->
     {isEditing ? (
         <>
             <input
                 type='text'
                 value={editedTitle}
                 onChange={handleTitleChange}
+                style={{ textDecoration: isChecked ? 'line-through' : 'none' }}
             />
             <button type='button' onClick={handleSaveClick}>
                 Save
@@ -63,7 +69,9 @@ style={{ textDecoration: isChecked ? 'line-through' : 'none' }}
     ) : (
     
         <>
-            {todo.title}
+        <span style={{ textDecoration: isChecked ? 'line-through' : 'none' }}>
+            {title}
+        </span>
             <div className={style.buttonsContainer}>
             <button type='button' onClick={handleEditClick}>
                 Edit
@@ -74,7 +82,6 @@ style={{ textDecoration: isChecked ? 'line-through' : 'none' }}
         </div>
         </>
     )}
-</span>
 </li>
     );
 };
@@ -84,8 +91,11 @@ TodoListItem.propTypes = {
     todo: PropTypes.shape({
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
+        isChecked: PropTypes.bool.isRequired,
     }).isRequired,
     onRemoveTodo: PropTypes.func.isRequired,
+    onEditTodo: PropTypes.func.isRequired,
+    onCheckboxChange: PropTypes.func.isRequired,
 };
 
 export default TodoListItem;

@@ -27,11 +27,13 @@
 
 .ListItem input[type='checkbox'] {
     appearance: none;
-    width: 1.5rem;
-    height: 1.5rem;
+    aspect-ratio: 1 / 1;
+    box-sizing: border-box;
+    width: calc(1.5rem - 4px);
+    height: calc(1.5rem - 4px);
     background-color: #0d2333;
     border: 2px solid #afc4da;
-    border-radius: 1rem;
+    border-radius: 50%;
     cursor: pointer;
     margin-right: 1rem;
     align-items: center;
