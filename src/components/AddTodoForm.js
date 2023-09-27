@@ -22,11 +22,13 @@ const AddTodoForm = ({ onAddTodo }) => {
         <InputWithLabel
         todoTitle={todoTitle}
         handleTitleChange={handleTitleChange}
-        title="Title"
-        children={"Title:"}
         type="text"
         id="TodoTitle"
-        ></InputWithLabel>
+
+        >
+          Title
+        </InputWithLabel>
+
           <button className={style.addButton} type="submit">Add</button>
         
       </form>
